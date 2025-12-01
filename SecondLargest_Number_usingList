@@ -1,0 +1,40 @@
+package week4Day2;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+public class SecondLargest_Number_usingList {
+
+	public static void main(String[] args) 
+	{
+		
+		Scanner sc = new Scanner(System.in);
+
+        // Ask user for size of array
+        System.out.print("Enter the number of elements: ");
+        int size = sc.nextInt();
+
+        //  Declare array with given size
+        int[] arr = new int[size];
+        for(int i=0;i<size;i++)
+        {
+        	arr[i]=sc.nextInt();
+        }
+        //declare a new list and add array elements in list
+        List<Integer> listofnumbers=new ArrayList<Integer>();
+        for(int i=0;i<arr.length;i++)
+		{
+        	listofnumbers.add(arr[i]);
+		}
+        //sort list
+        Collections.sort(listofnumbers);
+		System.out.println(listofnumbers);
+		
+		//retrive the size-2 and declare index to second
+		int second=listofnumbers.size()-2;
+		System.out.println("secondlargest number in list : "+listofnumbers.get(second));
+	}
+
+}
