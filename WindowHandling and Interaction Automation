@@ -1,0 +1,91 @@
+package week4Day2;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class WindowHandlingandInteractionAutomation {
+
+	public static void main(String[] args) 
+	{
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("guest");
+
+		// Launch the Browser
+		ChromeDriver driver = new ChromeDriver(options);
+
+		driver.get("http://leaftaps.com/opentaps/control/login");
+		System.out.println(driver.getTitle());
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+
+		//		 Enter the username and password.
+		driver.findElement(By.id("username")).sendKeys("DemoSalesManager");
+		driver.findElement(By.name("PASSWORD")).sendKeys("crmsfa");
+
+		//		 - Click on the Login button. 
+		driver.findElement(By.className("decorativeSubmit")).click();
+
+		//		 - Click on the CRM/SFA link. 
+
+		driver.findElement(By.partialLinkText("CRM")).click();
+
+		//		 - Click on the Contacts button. 
+
+		driver.findElement(By.xpath("//a[text()='Contacts']")).click();
+
+		//		 - Click on Merge Contacts.
+		driver.findElement(By.xpath("//a[text()='Merge Contacts']")).click();
+
+
+		//driver.findElement(By.xpath("//input[@name='ComboBox_partyIdFrom']")).sendKeys("");
+		//		 - Click on the widget of the "From Contact".
+		WebElement el = driver.findElement(By.xpath("//img[@alt='Lookup' and contains(@src,'fieldlookup')]"));
+		driver.executeScript("arguments[0].click();", el);
+
+		//window Handling function 1
+		Set<String>windowhandles=driver.getWindowHandles();
+
+		List<String>allHandles =new ArrayList<String>(windowhandles);
+		driver.switchTo().window(allHandles.get(1));
+
+		//		 - Click on the first resulting contact.
+		driver.findElement(By.xpath("//a[text()='DemoCustomer']")).click();
+
+		driver.switchTo().window(allHandles.get(0));
+
+		//		 - Click on the widget of the "To Contact". 
+		WebElement el2 = driver.findElement(By.xpath("(//img[@alt='Lookup'])[2]"));
+		driver.executeScript("arguments[0].click();", el2);
+
+		Set<String>windowhandle=driver.getWindowHandles();
+
+		List<String>allHandles2=new ArrayList<String>(windowhandle);
+		driver.switchTo().window(allHandles2.get(1));
+
+		//		 - Click on the second resulting contact. 
+
+		driver.findElement(By.xpath("//a[text()='DemoLBCust']")).click();
+
+		driver.switchTo().window(allHandles2.get(0));
+
+		//		 - Click on the Merge button. 
+		driver.findElement(By.xpath("//a[text()='Merge']")).click();
+
+		//		 - Accept the alert. 
+		Alert alert=driver.switchTo().alert();
+		alert.accept();
+
+		//		 - Verify the title of the page.
+		System.out.println("Page Title after merge: " + driver.getTitle());
+
+	}
+
+}
